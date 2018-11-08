@@ -1,4 +1,4 @@
-package se.emilsjolander.flipview;
+package se.emilsjolander.flipviewsample;
 
 import java.util.ArrayList;
 import java.util.List;

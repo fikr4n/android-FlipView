@@ -1,6 +1,7 @@
-package se.emilsjolander.flipview;
+package se.emilsjolander.flipviewsample;
 
-import se.emilsjolander.flipview.FlipAdapter.Callback;
+import se.emilsjolander.flipviewsample.FlipAdapter.Callback;
+import se.emilsjolander.flipview.*;
 import se.emilsjolander.flipview.FlipView.OnFlipListener;
 import se.emilsjolander.flipview.FlipView.OnOverFlipListener;
 import android.app.Activity;
