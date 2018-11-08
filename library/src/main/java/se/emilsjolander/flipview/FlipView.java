@@ -167,11 +167,11 @@ public class FlipView extends FrameLayout {
 				R.styleable.FlipView);
 
 		// 0 is vertical, 1 is horizontal
-		mIsFlippingVertically = a.getInt(R.styleable.FlipView_orientation,
+		mIsFlippingVertically = a.getInt(R.styleable.FlipView_fvOrientation,
 				VERTICAL_FLIP) == VERTICAL_FLIP;
 
 		setOverFlipMode(OverFlipMode.values()[a.getInt(
-				R.styleable.FlipView_overFlipMode, 0)]);
+				R.styleable.FlipView_fvOverFlipMode, 0)]);
 
 		a.recycle();
 
