@@ -1,19 +1,19 @@
 package se.emilsjolander.flipview;
 
 import android.graphics.Canvas;
-import android.support.v4.widget.EdgeEffectCompat;
+import android.widget.EdgeEffect;
 
 public class GlowOverFlipper implements OverFlipper {
 	
-	private EdgeEffectCompat mTopEdgeEffect;
-	private EdgeEffectCompat mBottomEdgeEffect;
+	private EdgeEffect mTopEdgeEffect;
+	private EdgeEffect mBottomEdgeEffect;
 	private FlipView mFlipView;
 	private float mTotalOverFlip;
 	
 	public GlowOverFlipper(FlipView v) {
 		mFlipView = v;
-		mTopEdgeEffect = new EdgeEffectCompat(v.getContext());
-		mBottomEdgeEffect = new EdgeEffectCompat(v.getContext());
+		mTopEdgeEffect = new EdgeEffect(v.getContext());
+		mBottomEdgeEffect = new EdgeEffect(v.getContext());
 	}
 
 	@Override
