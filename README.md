@@ -9,7 +9,7 @@ this looks and acts very much like the Flipboard application.
 
 All flipping animations should be very smooth and i have added lighting effects so the flipping look more realistic.
 
-Honeycomb (api lvl 11) or above is required for this library to work properly, however it will compile (and run, though without good performance) for much lower versions with just a few tweaks.
+Api lvl 14 or above is required for this library to work properly, however it will compile (and run, though without good performance) for much lower versions with just a few tweaks.
 
 Download a compiled version of the sample here:
 https://www.dropbox.com/s/tvmdhre4ra8l41p/sample-debug-unaligned.apk
@@ -24,6 +24,8 @@ dependencies {
 }
 ```
 
+Alternatively, you can also use [jitpack.io](https://jitpack.io/) for more choices.
+
 Usage
 -----
 After installing, create a layout file container a something similar to this:
@@ -33,8 +35,8 @@ After installing, create a layout file container a something similar to this:
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/flip_view"
-    flipview:orientation="vertical"
-    flipview:overFlipMode="glow" />
+    flipview:fvOrientation="vertical"
+    flipview:fvOverFlipMode="glow" />
 ```
 
 In your activity/fragment you should do somthing like this:

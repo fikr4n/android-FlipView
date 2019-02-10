@@ -16,8 +16,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v4.view.VelocityTrackerCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -167,11 +165,11 @@ public class FlipView extends FrameLayout {
 				R.styleable.FlipView);
 
 		// 0 is vertical, 1 is horizontal
-		mIsFlippingVertically = a.getInt(R.styleable.FlipView_orientation,
+		mIsFlippingVertically = a.getInt(R.styleable.FlipView_fvOrientation,
 				VERTICAL_FLIP) == VERTICAL_FLIP;
 
 		setOverFlipMode(OverFlipMode.values()[a.getInt(
-				R.styleable.FlipView_overFlipMode, 0)]);
+				R.styleable.FlipView_fvOverFlipMode, 0)]);
 
 		a.recycle();
 
@@ -463,17 +461,16 @@ public class FlipView extends FrameLayout {
 				break;
 			}
 
-			final int pointerIndex = MotionEventCompat.findPointerIndex(ev,
-					activePointerId);
+			final int pointerIndex = ev.findPointerIndex(activePointerId);
 			if (pointerIndex == -1) {
 				mActivePointerId = INVALID_POINTER;
 				break;
 			}
 
-			final float x = MotionEventCompat.getX(ev, pointerIndex);
+			final float x = ev.getX(pointerIndex);
 			final float dx = x - mLastX;
 			final float xDiff = Math.abs(dx);
-			final float y = MotionEventCompat.getY(ev, pointerIndex);
+			final float y = ev.getY(pointerIndex);
 			final float dy = y - mLastY;
 			final float yDiff = Math.abs(dy);
 
@@ -491,15 +488,15 @@ public class FlipView extends FrameLayout {
 		case MotionEvent.ACTION_DOWN:
 			mActivePointerId = ev.getAction()
 					& MotionEvent.ACTION_POINTER_INDEX_MASK;
-			mLastX = MotionEventCompat.getX(ev, mActivePointerId);
-			mLastY = MotionEventCompat.getY(ev, mActivePointerId);
+			mLastX = ev.getX(mActivePointerId);
+			mLastY = ev.getY(mActivePointerId);
 
 			mIsFlipping = !mScroller.isFinished() | mPeakAnim != null;
 			mIsUnableToFlip = false;
 			mLastTouchAllowed = true;
 
 			break;
-		case MotionEventCompat.ACTION_POINTER_UP:
+		case MotionEvent.ACTION_POINTER_UP:
 			onSecondaryPointerUp(ev);
 			break;
 		}
@@ -549,19 +546,18 @@ public class FlipView extends FrameLayout {
 			// Remember where the motion event started
 			mLastX = ev.getX();
 			mLastY = ev.getY();
-			mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+			mActivePointerId = ev.getPointerId(0);
 			break;
 		case MotionEvent.ACTION_MOVE:
 			if (!mIsFlipping) {
-				final int pointerIndex = MotionEventCompat.findPointerIndex(ev,
-						mActivePointerId);
+				final int pointerIndex = ev.findPointerIndex(mActivePointerId);
 				if (pointerIndex == -1) {
 					mActivePointerId = INVALID_POINTER;
 					break;
 				}
-				final float x = MotionEventCompat.getX(ev, pointerIndex);
+				final float x = ev.getX(pointerIndex);
 				final float xDiff = Math.abs(x - mLastX);
-				final float y = MotionEventCompat.getY(ev, pointerIndex);
+				final float y = ev.getY(pointerIndex);
 				final float yDiff = Math.abs(y - mLastY);
 				if ((mIsFlippingVertically && yDiff > mTouchSlop && yDiff > xDiff)
 						|| (!mIsFlippingVertically && xDiff > mTouchSlop && xDiff > yDiff)) {
@@ -572,15 +568,14 @@ public class FlipView extends FrameLayout {
 			}
 			if (mIsFlipping) {
 				// Scroll to follow the motion event
-				final int activePointerIndex = MotionEventCompat
-						.findPointerIndex(ev, mActivePointerId);
+				final int activePointerIndex = ev.findPointerIndex(mActivePointerId);
 				if (activePointerIndex == -1) {
 					mActivePointerId = INVALID_POINTER;
 					break;
 				}
-				final float x = MotionEventCompat.getX(ev, activePointerIndex);
+				final float x = ev.getX(activePointerIndex);
 				final float deltaX = mLastX - x;
-				final float y = MotionEventCompat.getY(ev, activePointerIndex);
+				final float y = ev.getY(activePointerIndex);
 				final float deltaY = mLastY - y;
 				mLastX = x;
 				mLastY = y;
@@ -632,11 +627,9 @@ public class FlipView extends FrameLayout {
 
 				int velocity = 0;
 				if (isFlippingVertically()) {
-					velocity = (int) VelocityTrackerCompat.getYVelocity(
-							velocityTracker, mActivePointerId);
+					velocity = (int) velocityTracker.getYVelocity(mActivePointerId);
 				} else {
-					velocity = (int) VelocityTrackerCompat.getXVelocity(
-							velocityTracker, mActivePointerId);
+					velocity = (int) velocityTracker.getXVelocity(mActivePointerId);
 				}
 				smoothFlipTo(getNextPage(velocity));
 
@@ -646,21 +639,20 @@ public class FlipView extends FrameLayout {
 				mOverFlipper.overFlipEnded();
 			}
 			break;
-		case MotionEventCompat.ACTION_POINTER_DOWN: {
-			final int index = MotionEventCompat.getActionIndex(ev);
-			final float x = MotionEventCompat.getX(ev, index);
-			final float y = MotionEventCompat.getY(ev, index);
+		case MotionEvent.ACTION_POINTER_DOWN: {
+			final int index = ev.getActionIndex();
+			final float x = ev.getX(index);
+			final float y = ev.getY(index);
 			mLastX = x;
 			mLastY = y;
-			mActivePointerId = MotionEventCompat.getPointerId(ev, index);
+			mActivePointerId = ev.getPointerId(index);
 			break;
 		}
-		case MotionEventCompat.ACTION_POINTER_UP:
+		case MotionEvent.ACTION_POINTER_UP:
 			onSecondaryPointerUp(ev);
-			final int index = MotionEventCompat.findPointerIndex(ev,
-					mActivePointerId);
-			final float x = MotionEventCompat.getX(ev, index);
-			final float y = MotionEventCompat.getY(ev, index);
+			final int index = ev.findPointerIndex(mActivePointerId);
+			final float x = ev.getX(index);
+			final float y = ev.getY(index);
 			mLastX = x;
 			mLastY = y;
 			break;
@@ -914,15 +906,14 @@ public class FlipView extends FrameLayout {
 	}
 
 	private void onSecondaryPointerUp(MotionEvent ev) {
-		final int pointerIndex = MotionEventCompat.getActionIndex(ev);
-		final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
+		final int pointerIndex = ev.getActionIndex();
+		final int pointerId = ev.getPointerId(pointerIndex);
 		if (pointerId == mActivePointerId) {
 			// This was our active pointer going up. Choose a new
 			// active pointer and adjust accordingly.
 			final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-			mLastX = MotionEventCompat.getX(ev, newPointerIndex);
-			mActivePointerId = MotionEventCompat.getPointerId(ev,
-					newPointerIndex);
+			mLastX = ev.getX(newPointerIndex);
+			mActivePointerId = ev.getPointerId(newPointerIndex);
 			if (mVelocityTracker != null) {
 				mVelocityTracker.clear();
 			}
